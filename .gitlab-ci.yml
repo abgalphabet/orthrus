@@ -1,0 +1,27 @@
+image: java:8
+
+stages:
+  - test
+  - deploy-challenge-node
+  - deploy-team-node
+
+test:
+  stage: test
+  script:
+    - ./gradlew clean test
+
+deploy-challenge-node:
+  stage: deploy-challenge-node
+  script:
+    - apt-get update -yq
+    - apt-get install rubygems ruby-dev -y
+    - gem install dpl
+    - dpl --provider=heroku --app=cis2017-horse-racing --api-key=e74a074a-2d25-4ea4-ac75-90a5ac739f89
+
+deploy-team-node:
+  stage: deploy-team-node
+  script:
+    - apt-get update -yq
+    - apt-get install rubygems ruby-dev -y
+    - gem install dpl
+    - dpl --provider=heroku --app=thawing-ravine --api-key=e74a074a-2d25-4ea4-ac75-90a5ac739f89
