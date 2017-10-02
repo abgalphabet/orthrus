@@ -11,6 +11,7 @@ import ratpack.handling.Handler
 class ConfHandler @Inject
 constructor(val conf: Config) : Handler {
     override fun handle(ctx: Context) {
+        ctx.request.clientCertificate
         ctx.render(conf.getString("app.env"))
     }
 }

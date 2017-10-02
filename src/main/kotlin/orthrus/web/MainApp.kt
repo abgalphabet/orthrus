@@ -6,31 +6,32 @@ import orthrus.conf.MainModule
 import orthrus.web.handlers.Handlers
 import ratpack.guice.Guice
 import ratpack.server.RatpackServer
+import ratpack.session.SessionModule
 import ratpack.ssl.internal.SslContexts
-import javax.net.ssl.KeyManagerFactory
-import javax.net.ssl.TrustManagerFactory
+
 
 /**
  * Created by arthur on 14/7/2017.
  */
-class MainApp: App {
+class MainApp : App {
     val http: RatpackServer
     val https: RatpackServer
 
     init {
-        val injector = com.google.inject.Guice.createInjector(MainModule())
+//        val injector = com.google.inject.Guice.createInjector(MainModule())
+        val registry = Guice.registry({ b -> b.module(MainModule()).module(SessionModule()) })
         http = RatpackServer.of { serverSpec ->
             serverSpec
-                .registry(Guice.registry(injector))
+//                .registry(Guice.registry(injector))
+                .registry(registry)
                 .handlers(Handlers())
-                .serverConfig {
-                    it.port(5080)
-                }
+                .serverConfig { it.port(5080) }
         }
 
         https = RatpackServer.of { serverSpec ->
             serverSpec
-                .registry(Guice.registry(injector))
+//                .registry(Guice.registry(injector))
+                .registry(registry)
                 .handlers(Handlers())
                 .serverConfig { serverConfigBuilder ->
                     val keystore = MainApp.javaClass.getResource("/pki/keystore.jks")
@@ -63,7 +64,8 @@ class MainApp: App {
     }
 
     companion object {
-        @JvmStatic fun main(args: Array<String>) {
+        @JvmStatic
+        fun main(args: Array<String>) {
             MainApp().start()
         }
     }
