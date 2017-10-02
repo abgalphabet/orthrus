@@ -1,10 +1,14 @@
 package orthrus.web
 
+import io.netty.handler.ssl.ClientAuth
+import io.netty.handler.ssl.SslContextBuilder
 import orthrus.conf.MainModule
 import orthrus.web.handlers.Handlers
 import ratpack.guice.Guice
 import ratpack.server.RatpackServer
-import ratpack.ssl.SSLContexts
+import ratpack.ssl.internal.SslContexts
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.TrustManagerFactory
 
 /**
  * Created by arthur on 14/7/2017.
@@ -29,10 +33,18 @@ class MainApp: App {
                 .registry(Guice.registry(injector))
                 .handlers(Handlers())
                 .serverConfig { serverConfigBuilder ->
-                    val keystore = MainApp.javaClass.getResource("/pki/keystore.p12")
-                    val truststore = MainApp.javaClass.getResource("/pki/truststore.p12")
+                    val keystore = MainApp.javaClass.getResource("/pki/keystore.jks")
+                    val truststore = MainApp.javaClass.getResource("/pki/truststore.jks")
 
-                    val sslContext = SSLContexts.sslContext(keystore, "passw0rd", truststore, "passw0rd")
+                    val keyManagerFactory = SslContexts.keyManagerFactory(keystore.openStream(), "passw0rd".toCharArray())
+                    val trustManagerFactory = SslContexts.trustManagerFactory(truststore.openStream(), "passw0rd".toCharArray())
+
+                    val sslContext = SslContextBuilder
+                        .forServer(keyManagerFactory)
+                        .trustManager(trustManagerFactory)
+                        .clientAuth(ClientAuth.REQUIRE)
+                        .build()
+
                     serverConfigBuilder
                         .ssl(sslContext)
                         .port(5443)
