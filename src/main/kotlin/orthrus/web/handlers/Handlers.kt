@@ -8,7 +8,8 @@ import ratpack.handling.Chain
  */
 class Handlers : Action<Chain> {
     override fun execute(chain: Chain) {
-        chain
+        chain.all(ProfileHandler::class.java)
             .get("conf", ConfHandler::class.java)
+            .path("annotated", AnnotatedHandler::class.java)
     }
 }

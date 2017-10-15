@@ -35,7 +35,7 @@ class MainApp : App {
                 .handlers(Handlers())
                 .serverConfig { serverConfigBuilder ->
                     val keystore = MainApp.javaClass.getResource("/pki/keystore.jks")
-                    val truststore = MainApp.javaClass.getResource("/pki/truststore.jks")
+                    val truststore = MainApp.javaClass.getResource("/pki/trust-foo-only.jks")
 
                     val keyManagerFactory = SslContexts.keyManagerFactory(keystore.openStream(), "passw0rd".toCharArray())
                     val trustManagerFactory = SslContexts.trustManagerFactory(truststore.openStream(), "passw0rd".toCharArray())
