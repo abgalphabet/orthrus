@@ -1,6 +1,6 @@
 package orthrus.web
 
-interface App {
+interface Service {
     fun start()
     fun stop()
 }

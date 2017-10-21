@@ -48,6 +48,7 @@ dependencies {
     compile 'org.apache.httpcomponents:fluent-hc:4.5.3'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.9'
     compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.0'
+    compile 'org.mongodb:mongo-java-driver:3.5.0'
 
     testCompile "io.ratpack:ratpack-test:$versions.ratpack"
     testCompile "org.jetbrains.spek:spek-api:$versions.spek"

@@ -1,10 +1,10 @@
 package orthrus.conf
 
-import com.google.inject.AbstractModule
-import com.google.inject.Provides
-import com.google.inject.Singleton
+import com.google.inject.*
+import com.mongodb.MongoClient
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
+import orthrus.web.EmbeddedMongoDB
 import orthrus.web.handlers.AnnotatedHandler
 import orthrus.web.handlers.ConfHandler
 import orthrus.web.handlers.ProfileHandler
@@ -15,11 +15,17 @@ class MainModule : AbstractModule() {
         bind(ConfHandler::class.java)
         bind(AnnotatedHandler::class.java)
         bind(ProfileHandler::class.java)
+        bind(EmbeddedMongoDB::class.java).`in`(Scopes.SINGLETON)
     }
 
     @Provides @Singleton
-    fun provideConfig(): Config {
+    fun config(): Config {
         return ConfigFactory.load("application.prod.conf")
+    }
+
+    @Provides @Singleton
+    fun mongoClient(mongoDB: EmbeddedMongoDB): MongoClient {
+        return mongoDB.client()
     }
 
 }

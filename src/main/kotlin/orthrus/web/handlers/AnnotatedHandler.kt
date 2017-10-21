@@ -1,6 +1,7 @@
 package orthrus.web.handlers
 
 import com.google.inject.Inject
+import com.mongodb.MongoClient
 import com.typesafe.config.Config
 import orthrus.*
 import ratpack.handling.Context
@@ -12,6 +13,9 @@ import kotlin.reflect.KParameter
 import kotlin.reflect.full.functions
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.javaType
+import com.mongodb.client.MongoCollection
+import org.bson.Document
+
 
 /**
  * Created by arthur on 17/6/2017.
@@ -66,7 +70,13 @@ constructor(val conf: Config) : Handler {
     @Post
     @HasPermission(arrayOf(Permission.All))
     fun post(ctx: Context) {
-        ctx.render(conf.getString("app.env"))
+        val doc = Document("insert", Date())
+                .append("timestamp", Date())
+                .append("somethings", listOf("1", "2", "3", "else"))
+
+        collection(ctx).insertOne(doc)
+        val id = doc.get("_id")
+        ctx.render("Resource $id is inserted")
     }
 
     @Put
@@ -78,6 +88,16 @@ constructor(val conf: Config) : Handler {
     @Delete
     @HasPermission(arrayOf(Permission.All))
     fun delete(ctx: Context, id: Int) {
+        val doc = Document("delete", id)
+                .append("timestamp", Date())
+                .append("somethings", listOf("1", "2", "3", "else"))
+        collection(ctx).insertOne(doc)
         ctx.render("Resourse $id is deleted.")
+    }
+
+    private fun collection(ctx: Context): MongoCollection<Document> {
+        val client = ctx.get(MongoClient::class.java)
+        val db = client.getDatabase("test")
+        return db.getCollection("resource")
     }
 }

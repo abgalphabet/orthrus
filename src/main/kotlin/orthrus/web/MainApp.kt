@@ -13,16 +13,16 @@ import ratpack.ssl.internal.SslContexts
 /**
  * Created by arthur on 14/7/2017.
  */
-class MainApp : App {
+class MainApp : Service {
     val http: RatpackServer
     val https: RatpackServer
+    val mongodb: EmbeddedMongoDB
 
     init {
-//        val injector = com.google.inject.Guice.createInjector(MainModule())
-        val registry = Guice.registry({ b -> b.module(MainModule()).module(SessionModule()) })
+        val injector = com.google.inject.Guice.createInjector(MainModule())
+        val registry = Guice.registry(injector) { it.module(SessionModule()) }
         http = RatpackServer.of { serverSpec ->
             serverSpec
-//                .registry(Guice.registry(injector))
                 .registry(registry)
                 .handlers(Handlers())
                 .serverConfig { it.port(5080) }
@@ -30,7 +30,6 @@ class MainApp : App {
 
         https = RatpackServer.of { serverSpec ->
             serverSpec
-//                .registry(Guice.registry(injector))
                 .registry(registry)
                 .handlers(Handlers())
                 .serverConfig { serverConfigBuilder ->
@@ -51,16 +50,20 @@ class MainApp : App {
                         .port(5443)
                 }
         }
+
+        mongodb = injector.getInstance(EmbeddedMongoDB::class.java)
     }
 
     override fun start() {
         http.start()
         https.start()
+        mongodb.start()
     }
 
     override fun stop() {
         http.stop()
         https.stop()
+        mongodb.stop()
     }
 
     companion object {

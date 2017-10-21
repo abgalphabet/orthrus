@@ -19,7 +19,7 @@ import orthrus.web.handlers.Handlers
 /**
  * Created by arthur on 14/7/2017.
  */
-class TestApp: App {
+class TestApp: Service {
     val server: RatpackServer
 
     val injector : Injector
