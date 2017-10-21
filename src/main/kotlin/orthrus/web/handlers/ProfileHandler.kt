@@ -13,7 +13,7 @@ class ProfileHandler : Handler {
         val certificate = ctx.request.clientCertificate
         if (certificate.isPresent) {
             session.data.then { data ->
-                data.set("permissions", arrayOf(Permission.Limited))
+                data.set("permissions", arrayOf(Permission.All))
                 ctx.next()
             }
         }

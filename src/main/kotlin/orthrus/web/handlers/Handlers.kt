@@ -9,7 +9,12 @@ import ratpack.handling.Chain
 class Handlers : Action<Chain> {
     override fun execute(chain: Chain) {
         chain.all(ProfileHandler::class.java)
-            .get("conf", ConfHandler::class.java)
-            .path("annotated", AnnotatedHandler::class.java)
+                .get("conf", ConfHandler::class.java)
+                .path("annotated/:id?", AnnotatedHandler::class.java)
+                .prefix("prefix") {
+                    it
+                            .get("get") { ctx -> ctx.render("get /prefix/get") }
+                            .post("post") { ctx -> ctx.render("post /prefix/post") }
+                }
     }
 }

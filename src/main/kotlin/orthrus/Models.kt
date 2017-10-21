@@ -9,6 +9,12 @@ annotation class Get
 annotation class Post
 
 @Target(AnnotationTarget.FUNCTION)
+annotation class Put
+
+@Target(AnnotationTarget.FUNCTION)
+annotation class Delete
+
+@Target(AnnotationTarget.FUNCTION)
 annotation class HasRole(val roles: Array<Role>)
 
 @Target(AnnotationTarget.FUNCTION)
