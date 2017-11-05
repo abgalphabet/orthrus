@@ -1,4 +1,4 @@
-package orthrus.web
+package orthrus
 
 import io.netty.handler.ssl.ClientAuth
 import io.netty.handler.ssl.SslContextBuilder
@@ -13,7 +13,7 @@ import ratpack.ssl.internal.SslContexts
 /**
  * Created by arthur on 14/7/2017.
  */
-class MainApp : Service {
+class Main : Startable, Stoppable {
     val http: RatpackServer
     val https: RatpackServer
     val mongodb: EmbeddedMongoDB
@@ -33,8 +33,8 @@ class MainApp : Service {
                 .registry(registry)
                 .handlers(Handlers())
                 .serverConfig { serverConfigBuilder ->
-                    val keystore = MainApp.javaClass.getResource("/pki/keystore.jks")
-                    val truststore = MainApp.javaClass.getResource("/pki/trust-foo-only.jks")
+                    val keystore = Main.javaClass.getResource("/pki/keystore.jks")
+                    val truststore = Main.javaClass.getResource("/pki/trust-foo-only.jks")
 
                     val keyManagerFactory = SslContexts.keyManagerFactory(keystore.openStream(), "passw0rd".toCharArray())
                     val trustManagerFactory = SslContexts.trustManagerFactory(truststore.openStream(), "passw0rd".toCharArray())
@@ -69,7 +69,7 @@ class MainApp : Service {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            MainApp().start()
+            Main().start()
         }
     }
 }

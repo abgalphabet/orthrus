@@ -11,7 +11,7 @@ import org.jetbrains.spek.api.dsl.it
  * Created by arthur on 17/6/2017.
  */
 object ConfApiSpec : Spek({
-    val app = TestApp()
+    val app = TestMain()
 
     beforeGroup { app.start() }
     afterGroup { app.stop() }

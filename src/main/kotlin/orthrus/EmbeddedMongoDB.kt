@@ -1,4 +1,4 @@
-package orthrus.web
+package orthrus
 
 import com.mongodb.MongoClient
 import de.flapdoodle.embed.mongo.MongodExecutable
@@ -11,7 +11,7 @@ import de.flapdoodle.embed.process.runtime.Network
 import java.net.ServerSocket
 
 
-class EmbeddedMongoDB(private val host: String = "localhost", targetPort: Int? = null) : GracefullyShutdownService() {
+class EmbeddedMongoDB(private val host: String = "localhost", targetPort: Int? = null) : Startable, Stoppable, GracefullyShutdownService() {
     private val executable: MongodExecutable
     private lateinit var mongod: MongodProcess
     private val port: Int

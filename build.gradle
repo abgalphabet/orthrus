@@ -3,12 +3,13 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.versions = [
-        ratpack: '1.5.0',
-        kotlin : '1.1.51',
-        spek   : '1.1.3',
-        junit  : '1.0.0-RC3',
-        log4j  : '2.8.2',
-        pac4j  : '2.1.0',
+            ratpack: '1.5.0',
+            kotlin : '1.1.51',
+            spek   : '1.1.3',
+            junit  : '1.0.0-RC3',
+            log4j  : '2.8.2',
+            pac4j  : '2.1.0',
+            shadow : '1.2.3',
     ]
 
     repositories {
@@ -19,12 +20,14 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "io.ratpack:ratpack-gradle:$versions.ratpack"
         classpath "org.junit.platform:junit-platform-gradle-plugin:$versions.junit"
+        classpath "com.github.jengelman.gradle.plugins:shadow:$versions.shadow"
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: "io.ratpack.ratpack-java"
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 
 sourceCompatibility = 1.8
@@ -69,5 +72,5 @@ junitPlatform {
     }
 }
 
-mainClassName = "orthrus.MainApp"
+mainClassName = "orthrus.Main"
 

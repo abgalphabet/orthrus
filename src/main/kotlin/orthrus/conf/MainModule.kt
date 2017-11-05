@@ -4,7 +4,7 @@ import com.google.inject.*
 import com.mongodb.MongoClient
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
-import orthrus.web.EmbeddedMongoDB
+import orthrus.EmbeddedMongoDB
 import orthrus.web.handlers.AnnotatedHandler
 import orthrus.web.handlers.ConfHandler
 import orthrus.web.handlers.ProfileHandler

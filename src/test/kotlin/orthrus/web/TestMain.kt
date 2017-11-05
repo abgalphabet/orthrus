@@ -2,6 +2,8 @@ package orthrus.web
 
 import com.google.inject.Injector
 import com.google.inject.util.Modules
+import orthrus.Startable
+import orthrus.Stoppable
 import orthrus.conf.MainModule
 import orthrus.conf.TestModule
 import ratpack.guice.Guice
@@ -19,19 +21,19 @@ import orthrus.web.handlers.Handlers
 /**
  * Created by arthur on 14/7/2017.
  */
-class TestApp: Service {
+class TestMain : Startable, Stoppable {
     val server: RatpackServer
 
-    val injector : Injector
+    val injector: Injector
     val httpclient: TestHttpClient
 
     init {
         injector = com.google.inject.Guice.createInjector(Modules.override(MainModule()).with(TestModule()))
         val app = EmbeddedApp.of { serverSpec: RatpackServerSpec ->
-                serverSpec
+            serverSpec
                     .registry(Guice.registry(injector))
                     .handlers(Handlers())
-            }
+        }
         server = app.server
         httpclient = app.httpClient
     }
